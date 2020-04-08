@@ -94,16 +94,16 @@ class EsGroupBy:
         }
 
     def __filters_builder(self, filters, time_range_start, time_range_end):
-        filters = []
+        filters_value = []
 
         for el in filters:
-            filters.append(self.__filter_element_builder(el))
+            filters_value.append(self.__filter_element_builder(el))
 
-        filters.append(self.__time_range_filter_builder(
+        filters_value.append(self.__time_range_filter_builder(
             time_range_start,
             time_range_end))
 
-        return filters
+        return filters_value
 
     def dsl(self, after=None):
 
