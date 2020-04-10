@@ -160,30 +160,30 @@ class EsGroupBy:
                 'my_buckets'][
                 'buckets']
 
-            after_key = res_json['aggregations'][
-                'my_buckets'][
-                'after_key']
+            if (res_json_buckets != []):
+                after_key = res_json['aggregations'][
+                    'my_buckets'][
+                    'after_key']
 
-            df_res = pd.DataFrame(res_json_buckets)
-            df_list = [json_normalize(df_res['key'])]
-            df_list.append(df_res['doc_count'])
+                df_res = pd.DataFrame(res_json_buckets)
+                df_list = [json_normalize(df_res['key'])]
+                df_list.append(df_res['doc_count'])
 
-            for el in self.operations_list:
-                field, value = next(iter(el.items()))
-                field_name = field+'_'+value
-                df_op_result = json_normalize(df_res[field_name]).rename(
-                    columns={'value': field_name})
-                df_list.append(df_op_result)
+                for el in self.operations_list:
+                    field, value = next(iter(el.items()))
+                    field_name = field + '_' + value
+                    df_op_result = json_normalize(df_res[field_name]).rename(
+                        columns={'value': field_name})
+                    df_list.append(df_op_result)
 
-            df_prep = pd.concat(df_list, axis=1)
+                df_prep = pd.concat(df_list, axis=1)
+                self.dataframe = self.dataframe.append(df_prep)
+                result_size = df_prep.shape[0]
 
-            self.dataframe = self.dataframe.append(df_prep)
-
-            result_size = df_prep.shape[0]
+            else:
+                result_size = 0
 
             num_iteration = num_iteration + 1
             print('Iteration: ' + str(num_iteration))
             print('Last result size: ' + str(result_size))
-            print('Last keys: ' + str(after_key))
-
         return self
