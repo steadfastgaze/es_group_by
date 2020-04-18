@@ -15,7 +15,7 @@ class EsGroupBy:
                  operations=None):
 
         self.es = es_connection
-        self.SIZE = 10000
+        self.SIZE = single_page_size
         self.index_pattern = index_pattern
         self.groupby(groupbys)
         self.agg(operations)
